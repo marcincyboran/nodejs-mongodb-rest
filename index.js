@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const homeRouter = require('./routes/home');
+const customersRouter = require('./routes/customers');
 const genresRouter = require('./routes/genres');
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROUTES AFTER OTHER USES
 app.use('/', homeRouter);
+app.use('/api/customers', customersRouter);
 app.use('/api/genres', genresRouter);
 
 const port = process.env.PORT || 3000;
