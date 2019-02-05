@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { Movie, validate } = require('../models/movies');
+const { Movie, validateMovie } = require('../models/movies');
 const { Genre } = require('../models/genres');
 
 const router = express.Router();
@@ -27,7 +27,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const { error } = validate(req.body);
+        const { error } = validateMovie(req.body);
         if (error) return res.status(400).send(error.details[0].message);
     
         const genre = await Genre.findById(req.body.genreId);
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-    const { error } = validate(req.body);
+    const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const genre = await Genre.findById(req.body.genreId);
