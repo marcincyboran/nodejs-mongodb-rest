@@ -4,6 +4,7 @@ const homeRouter = require('./routes/home');
 const customersRouter = require('./routes/customers');
 const genresRouter = require('./routes/genres');
 const moviesRouter = require('./routes/movies');
+const rentalsRouter = require('./routes/rentals');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/', homeRouter);
 app.use('/api/customers', customersRouter);
 app.use('/api/genres', genresRouter);
 app.use('/api/movies', moviesRouter);
+app.use('/api/rentals', rentalsRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
