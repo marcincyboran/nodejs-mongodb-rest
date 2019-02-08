@@ -25,14 +25,14 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const { error } = validateGenre(req.body);
-    if ( error ) return res.status(400).send(validate.error.details[0].message);
+    if ( error ) return res.status(400).send(error.details[0].message);
 
-    let genre = new Genre({
+    const genre = new Genre({
         type: req.body.type
     })
 
     try {
-        genre = await genre.save();
+        await genre.save();
         res.send(genre);
     } catch (ex) {
         res.status(404).send(ex.message);
@@ -41,10 +41,10 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     const { error } = validateGenre(req.body);
-    if ( error ) return res.status(400).send(validate.error.details[0].message);
+    if ( error ) return res.status(400).send(error.details[0].message);
 
     try {
-        let genre = await Genre.findByIdAndUpdate(req.params.id, {
+        const genre = await Genre.findByIdAndUpdate(req.params.id, {
             type: req.body.type
         }, { new: true });
         res.send(genre);

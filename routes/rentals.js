@@ -1,17 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const Fawn = require('fawn');
 const { Rental, validateRental } = require('../models/rentals');
 const { Customer } = require('../models/customer');
 const { Movie } = require('../models/movies');
 
 const router = express.Router();
+Fawn.init(mongoose);
 
 router.get('/', async (req, res) => {
     try {
         const rentals = await Rental.find().sort('-dateOut');
         res.send(rentals);
     } catch (ex) {
-        res.status(404).send(ex);      
+        res.status(404).send(ex.message);      
     }
 })
 
@@ -25,7 +27,7 @@ router.post('/', async (req, res) => {
 
         if( movie.numberInStock <= 0) return res.status(400).send('This movie is out of stock');
 
-        let rental = new Rental ({
+        const rental = new Rental ({
             customer: {
                 _id: customer._id,
                 name: customer.name,
@@ -39,15 +41,19 @@ router.post('/', async (req, res) => {
             },
         });
 
-        rental = await rental.save();
-
-        movie.numberInStock--;
-        movie.save()
+        new Fawn.Task()
+            .save('rentals', rental)
+            .update('movies', { _id: movie._id }, {
+                $inc: {
+                    numberInStock: -1
+                }
+            })
+            .run();
 
         res.send(rental);
 
     } catch (ex) {
-        res.status(404).send(ex);              
+        res.status(404).send(ex.message);              
     }
 })
 
