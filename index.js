@@ -14,7 +14,7 @@ const config = require('config');
 const app = express();
 
 if (!config.get('jwtPrivateKey')) {
-    console.log('ERROR - jwtPrivateKey is not defined');
+    console.log('ERROR - projekt1_jwtPrivateKey is not defined');
     process.exit(1);
 }
 
@@ -25,7 +25,7 @@ mongoose.connect('mongodb://localhost/db-genres')
 
 // Parse req body
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 
 // ROUTES AFTER OTHER USES
 app.use('/', homeRouter);
@@ -36,7 +36,7 @@ app.use('/api/rentals', rentalsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
-const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is up. Listening on port ${port}...`)
 });
