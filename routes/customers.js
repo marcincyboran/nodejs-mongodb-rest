@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         const customers = await Customer.find();
         res.send(customers);
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
@@ -18,10 +18,8 @@ router.get('/:id', async (req, res) => {
         const customer = await Customer.findById(req.params.id);
         res.send(customer);
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
-    res.send('get:id')
-
 });
 
 router.post('/', async (req, res) => {
@@ -38,7 +36,7 @@ router.post('/', async (req, res) => {
         await customer.save();
         res.send(customer)
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
@@ -54,7 +52,7 @@ router.put('/:id', async (req, res) => {
         }, { new: true });
         res.send(customer);
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 
@@ -63,7 +61,7 @@ router.delete('/:id', async (req, res) => {
         const customer = await Customer.findByIdAndRemove(req.params.id);
         res.send(customer);
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 

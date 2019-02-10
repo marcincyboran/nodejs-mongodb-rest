@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -6,17 +7,16 @@ const { User, validateUser } = require('../models/user');
 
 const router = express.Router();
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const users = await User.find();
-//         res.send(users);
-//     } catch (ex) {
-//         res.status(404).send(ex.message);        
-//     }
-// });
+router.get('/me', auth, async (req, res) => {
+    try {
+        const user = await User.findById( req.user._id ).select('-password');
+        res.send(user);
+    } catch (ex) {
+        res.status(500).send(ex.message);        
+    }
+});
 
 router.post('/', async (req, res) => {
-    
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
 
         res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 

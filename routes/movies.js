@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         const movies = await Movie.find();
         res.send(movies);
     } catch (ex) {
-        res.status(404).send(ex);
+        res.status(500).send(ex);
     }
 });
 
@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
 
         res.send(movie);
     } catch (ex) {
-        res.status(404).send(ex);
+        res.status(500).send(ex);
     }
 });
 
@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 
         res.send(movie);
     } catch (ex) {
-        res.status(404).send(ex);
+        res.status(500).send(ex);
     }
 });
 
@@ -54,19 +54,23 @@ router.put('/:id', async (req, res) => {
     const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const genre = await Genre.findById(req.body.genreId);
-
-    let movie = await Movie.findByIdAndUpdate(req.params.id, {
-        title: req.body.title,
-        genre: {
-            _id: genre._id,
-            type: genre.type
-        },
-        numberInStock: req.body.numberInStock,
-        dailyRentalRate: req.body.dailyRentalRate
-    }, { new: true });
-
-    res.send(movie);
+    try {
+        const genre = await Genre.findById(req.body.genreId);
+    
+        let movie = await Movie.findByIdAndUpdate(req.params.id, {
+            title: req.body.title,
+            genre: {
+                _id: genre._id,
+                type: genre.type
+            },
+            numberInStock: req.body.numberInStock,
+            dailyRentalRate: req.body.dailyRentalRate
+        }, { new: true });
+    
+        res.send(movie);
+    } catch (ex) {
+        res.status(500).send(ex);        
+    }
 });
 
 router.delete('/:id', async (req, res) => {
@@ -75,7 +79,7 @@ router.delete('/:id', async (req, res) => {
 
         res.send(movie);
     } catch (ex) {
-        res.status(404).send(ex);
+        res.status(500).send(ex);
     }
 });
 

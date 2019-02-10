@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 
         res.header('x-auth-token', token).send(true);
     } catch (ex) {
-        res.status(404).send(ex.message);
+        res.status(500).send(ex.message);
     }
 });
 

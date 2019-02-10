@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
         const rentals = await Rental.find().sort('-dateOut');
         res.send(rentals);
     } catch (ex) {
-        res.status(404).send(ex.message);      
+        res.status(500).send(ex.message);      
     }
 })
 
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
         res.send(rental);
 
     } catch (ex) {
-        res.status(404).send(ex.message);              
+        res.status(500).send(ex.message);              
     }
 })
 
